@@ -1,68 +1,65 @@
-var texto = document.querySelector("#IngresoTexto");
-var encriptado = document.querySelector("#encriptado");
-var botonEncriptar = document.querySelector("#boton_encriptar");
-var botonDesencriptar = document.querySelector("#boton_desencriptar");
-var botonCopiar = document.querySelector("#boton_copiar");
-var letras = ["a","e","i", "o", "u"];
-var codigos = ["ai", "enter", "imes", "ober", "ufat"];
-var acentos = ["Á", "É", "Í", "Ó", "Ú", "á", "é", "í", "ó", "ú", "A", "E", "I", "O", "U"];
-var sinAcentos = ["a","e","i","o","u","a","e","i","o","u","a","e","i","o","u"];
+const botonEncriptar = document.querySelector('#btnEncriptar');
+const botonDesencriptar = document.querySelector('#btnDesencriptar');
+const botonCopiar = document.querySelector('#btnCopiar');
+var mensajeAEncriptar = document.querySelector('#mensajeAEncriptar');
+var mensajeEncriptado = document.querySelector('#mensajeEncriptado');
 
+botonEncriptar.addEventListener('click', ()=>{
+    const fraseNueva = encriptarMensaje(mensajeAEncriptar.value);
+    mensajeEncriptado.value = fraseNueva;
+    mensajeAEncriptar.value = '';
+});
 
-function encriptar(){
-    //console.log(texto.value);
-    var arrayTextoEncriptado = [];
-    for (let i of texto.value){
-        arrayTextoEncriptado.push(i);
-    }
-    //console.log(arrayTextoEncriptado);
-    for(var x=0; x<arrayTextoEncriptado.length; x++){
-        for(var y=0; y<acentos.length; y++){
-            if(arrayTextoEncriptado[x] == acentos[y]){
-                arrayTextoEncriptado[x] = sinAcentos[y];
-            }
-        }
-    }
-    //console.log(arrayTextoEncriptado.join(""));
+botonDesencriptar.addEventListener('click', ()=>{
+    const fraseNueva = desencriptarMensaje(mensajeAEncriptar.value);
+    mensajeEncriptado.value = fraseNueva;
+    mensajeAEncriptar.value = '';
+});
 
-    for(var x=0; x<arrayTextoEncriptado.length; x++){
-        for(var y=0; y<letras.length; y++){
-            if(arrayTextoEncriptado[x] == letras[y]){
-                arrayTextoEncriptado[x] = codigos[y];
-            }
-        }
-    }
-    //console.log(arrayTextoEncriptado.join(""));
-    encriptado.value=arrayTextoEncriptado.join("");
-    texto.value="";
-    texto.focus();
-}
-
-function desencriptar(){
-    //console.log(texto.value);
-    var fraseDesencriptada;
-    for(var x= 0; x<letras.length; x++){
-        if(x == 0){
-            fraseDesencriptada=texto.value.replaceAll(codigos[x], letras[x]);
-        }
-        if(x > 0){
-            fraseDesencriptada = fraseDesencriptada.replaceAll(codigos[x], letras[x])
-        }
-    }
-    encriptado.value = fraseDesencriptada;
-    texto.value="";
-    texto.focus();
-    //console.log(fraseDesencriptada);
-}
-
-function copiar(){
-    encriptado.select();
+botonCopiar.addEventListener('click', ()=>{
+    mensajeEncriptado.select();
     document.execCommand("copy");
+});
+
+const encriptarMensaje = (frase) =>{
+    frase = frase.split('');
+    for(let i=0; i<frase.length; i++){
+        switch(frase[i]){
+            case 'a': frase[i]='ai';
+            case 'A': frase[i]='ai';
+            case 'á': frase[i]='ai';
+            case 'Á': frase[i]='ai';break;
+            case 'e': frase[i]='enter';
+            case 'E': frase[i]='enter';
+            case 'é': frase[i]='enter';
+            case 'É': frase[i]='enter';break;
+            case 'i': frase[i]='imes';
+            case 'I': frase[i]='imes';
+            case 'í': frase[i]='imes';
+            case 'Í': frase[i]='imes';break;
+            case 'o': frase[i]='ober';
+            case 'O': frase[i]='ober';
+            case 'ó': frase[i]='ober';
+            case 'Ó': frase[i]='ober';break;
+            case 'u': frase[i]='ufat';
+            case 'U': frase[i]='ufat';
+            case 'ú': frase[i]='ufat';
+            case 'Ú': frase[i]='ufat';break;
+        }
+    }
+    return frase.join("");
 }
 
-botonEncriptar.onclick=encriptar;
-botonDesencriptar.onclick=desencriptar;
-botonCopiar.onclick=copiar;
+const desencriptarMensaje = (frase) =>{
+    const regex = ['ai', 'enter', 'imes', 'ober', 'ufat'];
+    const vocales = ['a', 'e', 'i', 'o', 'u'];
+    for(let i=0; i<regex.length; i++){
+        frase = frase.replaceAll(regex[i], vocales[i]);
+    }
+    return frase;
+}
+
+
 
 
 /* Reglas de encriptación: 
